@@ -31,8 +31,13 @@ notes.delete('/:unique_id', (req, res) => {
         const jsData = JSON.parse(data);
         // identify object you want to delete using the key (unique_id)
         // delete from an array (using filter)
+        // this grabs the unique id key from the request.params object (the /:unique_id)
         const idtoDelete = req.params.unique_id;
+        // This filters through the array of objects being returned from db.json
         const outPut = jsData.filter((value) => {
+        // this matches the unique id key from each object inside the db.json array to the re.params.unique_id we grabbed above
+        // filter works by deleting it from the array if false and returning it if true
+        // so this returns all of the object except the one we want to delete
             if (value.unique_id === idtoDelete) {
                 return false;
             } else {
@@ -40,7 +45,9 @@ notes.delete('/:unique_id', (req, res) => {
             }
         })
         // write file using write file
+        // this writes the output of the filter method above back to the json file
         writeToFile('./db/db.json', outPut);
+        // these must be followed by a res.json() to end the call
         res.json('Note deleted')
     })
 
